@@ -40,7 +40,7 @@ fun ScreenDatePickerWithDialog() {
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val dateRangePickerState = rememberDateRangePickerState()
-
+    var selectedDate by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -58,9 +58,8 @@ fun ScreenDatePickerWithDialog() {
                         showDatePicker = true
                     }
                 ) {
-                    Text("Date Picker")
+                    Text("Picker")
                 }
-
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
@@ -68,7 +67,7 @@ fun ScreenDatePickerWithDialog() {
                         showDatePicker = true
                     }
                 ) {
-                    Text("Date Range Picker")
+                    Text("Range")
                 }
             }
         }
@@ -77,7 +76,7 @@ fun ScreenDatePickerWithDialog() {
         Column(
             modifier = Modifier.padding(padding)
         ) {
-
+            Text("Selected Date: $selectedDate")
             when (selectedIndex) {
                 1 -> {
                     DatePickerDialog(
@@ -180,12 +179,10 @@ fun DateRangePickerDialog(
                 state = state,
                 modifier = Modifier
                     .fillMaxWidth()
-//                    .padding(16.dp)
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
