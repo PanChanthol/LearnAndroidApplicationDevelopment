@@ -1,4 +1,4 @@
-package com.example.myapplication.compose.radiobutton
+package com.example.myapplication.compose.bottomsheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -29,7 +30,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenRadioButton() {
+fun ScreenBottomSheet() {
     val (selectedSize, onSizeSelected) = remember { mutableIntStateOf(1)}
     val (selectedSugar, onSugarSelected) = remember { mutableIntStateOf(1)}
     val sizeModel = SizeModel
@@ -39,7 +40,7 @@ fun ScreenRadioButton() {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("RadioButton")
+                    Text("BottomSheet")
                 },
                 navigationIcon = {
                     Icon(
@@ -48,6 +49,18 @@ fun ScreenRadioButton() {
                 },
             )
         },
+        bottomBar = {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {}
+            ) {
+                Text("Submit")
+            }
+            }
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -111,10 +124,10 @@ fun ScreenRadioButton() {
 
 @Preview(showBackground = true)
 @Composable
-fun ScreenRadioButtonPreview() {
+fun ScreenBottomSheetPreview() {
     MaterialTheme {
         MyApplicationTheme {
-            ScreenRadioButton()
+            ScreenBottomSheet()
         }
     }
 }
