@@ -18,12 +18,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -41,9 +44,10 @@ fun ScreenBottomSheet() {
     val bottonSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-    val sizeModel = SizeModel
-    val sugarModel = sugarModel
-
+    val sizeList = sizeList
+    val sugarList = sugarList
+    var sugar by remember { mutableStateOf<Model?>(null) }
+    var size by remember { mutableStateOf<Model?>(null) }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -80,78 +84,117 @@ fun ScreenBottomSheet() {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            Text("Size : ${size?.label}")
+            Text("Sugar : ${sugar?.label}")
+
             if (showBottomSheet) {
                 ModalBottomSheet(
-                    onDismissRequest = { onShowBottomSheet(false) },
-                    sheetState = bottonSheetState
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Select Size",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        sizeModel.forEachIndexed { index, item ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(onClick = {
-                                        onSizeSelected(index)
-                                    }),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = selectedSize == index,
-                                    onClick = {
-                                        onSizeSelected(index)
-                                    })
-                                Text(
-                                    text = item.label,
-                                )
-                            }
-                        }
-                        HorizontalDivider()
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Select Sugar",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        sugarModel.forEachIndexed { index, item ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(onClick = {
-                                        onSugarSelected(index)
-                                    }),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = selectedSugar == index,
-                                    onClick = {
-                                        onSugarSelected(index)
-                                    })
-                                Text(
-                                    text = item.label,
-                                )
-                            }
-                        }
-                        HorizontalDivider()
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                onShowBottomSheet(false)
-                            }
-                        ) {
-                            Text("Confirm")
-                        }
-                    }
+                    onShowBottomSheet = onShowBottomSheet,
+                    sheetState = bottonSheetState,
+                    onSizeSelected = onSizeSelected,
+                    onSugarSelected = onSugarSelected,
+                    selectedSize = selectedSize,
+                    selectedSugar = selectedSugar,
+                    sizeList = sizeList,
+                    sugarList = sugarList,
+                ){ sizeResult, sugarResult ->
+                    size = sizeResult
+                    sugar = sugarResult
                 }
             }
+        }
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ModalBottomSheet(
+    onShowBottomSheet: (Boolean) -> Unit,
+    sheetState: SheetState,
+    onSizeSelected: (Int) -> Unit,
+    onSugarSelected: (Int) -> Unit,
+    selectedSize: Int,
+    selectedSugar: Int,
+    sizeList: List<Model>,
+    sugarList: List<Model>,
+    onConfirm: (size: Model, sugar: Model) -> Unit
+) {
+    fun onClick() {
+        val sugar = sugarList[selectedSugar]
+        val size = sizeList[selectedSize]
+        onConfirm(size, sugar)
+        onShowBottomSheet(false)
+    }
 
+    ModalBottomSheet(
+        onDismissRequest = {
+            onClick()
+        },
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Select Size",
+                style = MaterialTheme.typography.titleLarge
+            )
+            sizeList.forEachIndexed { index, item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = {
+                            onSizeSelected(index)
+                        }),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedSize == index,
+                        onClick = {
+                            onSizeSelected(index)
+                        })
+                    Text(
+                        text = item.label,
+                    )
+                }
+            }
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Select Sugar",
+                style = MaterialTheme.typography.titleLarge
+            )
+            sugarList.forEachIndexed { index, item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = {
+                            onSugarSelected(index)
+                        }),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedSugar == index,
+                        onClick = {
+                            onSugarSelected(index)
+                        })
+                    Text(
+                        text = item.label,
+                    )
+                }
+            }
+            HorizontalDivider()
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    onClick()
+                    onShowBottomSheet(false)
+                }
+            ) {
+                Text("Confirm")
+            }
         }
     }
 }
@@ -170,7 +213,7 @@ data class Model(
     val id: String, val label: String
 )
 
-val SizeModel = listOf<Model>(
+val sizeList = listOf<Model>(
     Model(
         id = SizeCapModel.SMALL.code,
         label = "Small",
@@ -190,7 +233,7 @@ enum class SizeCapModel(val code: String) {
     SMALL("1"), MEDIUM("2"), lARGE("3"), EXTRA_LARGE("4"),
 }
 
-val sugarModel = listOf<Model>(
+val sugarList = listOf<Model>(
     Model(
         id = SugarModel.LEVEL_0.code,
         label = "No Sugar",
