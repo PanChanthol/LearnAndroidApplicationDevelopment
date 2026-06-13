@@ -108,7 +108,7 @@ fun ScreenFullDialog() {
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        openFullDialog = true
+                        openDialog = true
                         selectedIndex =1}
                 ) { Text("Alert Dialog") }
                 Button(
