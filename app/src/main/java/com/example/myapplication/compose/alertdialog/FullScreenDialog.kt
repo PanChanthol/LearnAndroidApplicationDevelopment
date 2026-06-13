@@ -54,13 +54,10 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 fun ScreenFullDialog() {
     var openDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
-    var openFullDialog by remember {
-        mutableStateOf(false)
-    }
     when (selectedIndex) {
         1 -> {
             Dialog(
-                openDialog = true,
+                openDialog = openDialog,
                 onDismiss = {
                     openDialog = false
                     selectedIndex = 0
@@ -70,9 +67,9 @@ fun ScreenFullDialog() {
 
         2 -> {
             FullScreenDialog(
-                fullDialog = true,
+                openDialog = openDialog,
                 onDismiss = {
-                    openFullDialog = false
+                    openDialog = false
                     selectedIndex = 0
                 }
             )
@@ -114,7 +111,7 @@ fun ScreenFullDialog() {
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        openFullDialog = true
+                        openDialog = true
                         selectedIndex =2
                     }
                 ) { Text("Full Screen Dialog") }
@@ -140,10 +137,10 @@ fun ScreenFullDialogPreview() {
 
 @Composable
 fun FullScreenDialog(
-     fullDialog: Boolean,
+    openDialog: Boolean,
      onDismiss: () -> Unit
 ){
-    if (fullDialog) {
+    if (openDialog) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
