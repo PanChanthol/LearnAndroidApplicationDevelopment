@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.myapplication.compose.bottomsheet.ScreenBottomSheet
+import com.example.myapplication.compose.snackbar.ScreenSnackBarWithAction
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme(
             ) {
-                ScreenBottomSheet()
+                ScreenSnackBarWithAction()
+//                ScreenSnackBar()
+//                ScreenBottomSheet()
 //                ScreenCombineDrawerAndBar()
 //                ScreenLoadingAndProgress()
 //                ScreenFullDialog()
