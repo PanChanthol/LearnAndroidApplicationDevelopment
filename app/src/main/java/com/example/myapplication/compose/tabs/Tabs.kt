@@ -1,6 +1,7 @@
 package com.example.myapplication.compose.tabs
 
-import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,13 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,15 +44,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenTabs() {
-    var selectedTabIndex by remember { mutableIntStateOf(TabsIndex.ALL_CHATS.index) }
+//    var selectedTabIndex by remember { mutableIntStateOf(TabsIndex.ALL_CHATS.index) }
     val tabsList = tabsList
     val pagerState = rememberPagerState(pageCount = { tabsList.size })
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }
-            .collect { page ->
-                selectedTabIndex = page
-            }
-    }
+//    LaunchedEffect(pagerState) {
+//        snapshotFlow { pagerState.currentPage }
+//            .collect { page ->
+//                selectedTabIndex = page
+//            }
+//    }
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
@@ -80,25 +75,26 @@ fun ScreenTabs() {
                 .fillMaxSize()
         ) {
             PrimaryTabRow(
-                selectedTabIndex = selectedTabIndex,
+                selectedTabIndex = pagerState.currentPage
             ) {
-                for (tab in tabsList.indices) {
-                    println(tab)
+                tabsList.forEachIndexed { index, item ->
+
                     Tab(
-                        selected = tab == selectedTabIndex,
+                        selected = pagerState.currentPage == index,
                         onClick = {
-                            selectedTabIndex = tab
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(
-                                    page = selectedTabIndex,
-                                    animationSpec = TweenSpec(1000)
+                                    page = index,
+                                    animationSpec = tween(
+                                        durationMillis = 1000,
+                                        easing = FastOutSlowInEasing
+                                    )
                                 )
                             }
                         },
                         text = {
-                            Text(text = tabsList[tab].label)
+                            Text(item.label)
                         }
-
                     )
                 }
             }
@@ -107,23 +103,23 @@ fun ScreenTabs() {
                     .fillMaxSize(),
                 verticalAlignment = Alignment.Top,
                 state = pagerState
-            ) {
-                when (selectedTabIndex) {
-                    TabsIndex.ALL_CHATS.index -> {
+            ) { page->
+                when (page) {
+                    0-> {
                         Home(
                             modifier = Modifier,
                             Text = "All Chats"
                         )
                     }
 
-                    TabsIndex.WORKING.index -> {
+                    1 -> {
                         Home(
                             modifier = Modifier,
                             Text = "Working"
                         )
                     }
 
-                    TabsIndex.REAN_IT.index -> {
+                    2 -> {
                         Home(
                             modifier = Modifier,
                             Text = "Rean IT"
