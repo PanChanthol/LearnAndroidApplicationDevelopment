@@ -44,15 +44,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenTabs() {
-//    var selectedTabIndex by remember { mutableIntStateOf(TabsIndex.ALL_CHATS.index) }
     val tabsList = tabsList
     val pagerState = rememberPagerState(pageCount = { tabsList.size })
-//    LaunchedEffect(pagerState) {
-//        snapshotFlow { pagerState.currentPage }
-//            .collect { page ->
-//                selectedTabIndex = page
-//            }
-//    }
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
@@ -103,9 +96,9 @@ fun ScreenTabs() {
                     .fillMaxSize(),
                 verticalAlignment = Alignment.Top,
                 state = pagerState
-            ) { page->
+            ) { page ->
                 when (page) {
-                    0-> {
+                    0 -> {
                         Home(
                             modifier = Modifier,
                             Text = "All Chats"
@@ -236,12 +229,6 @@ fun Home(
             }
         }
     }
-}
-
-enum class TabsIndex(val index: Int) {
-    ALL_CHATS(0),
-    WORKING(1),
-    REAN_IT(2),
 }
 
 data class TabsModel(
