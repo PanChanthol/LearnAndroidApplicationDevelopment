@@ -82,19 +82,23 @@ fun ScreenTabs() {
             PrimaryTabRow(
                 selectedTabIndex = selectedTabIndex,
             ) {
-                tabsList.forEachIndexed { index, item ->
+                for (tab in tabsList.indices) {
+                    println(tab)
                     Tab(
-                        selected = selectedTabIndex == index,
+                        selected = tab == selectedTabIndex,
                         onClick = {
-                            selectedTabIndex = index
+                            selectedTabIndex = tab
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(
-                                   page =  selectedTabIndex,
+                                    page = selectedTabIndex,
                                     animationSpec = TweenSpec(1000)
                                 )
                             }
                         },
-                        text = { Text(item.label) },
+                        text = {
+                            Text(text = tabsList[tab].label)
+                        }
+
                     )
                 }
             }
