@@ -64,7 +64,6 @@ fun ScreenFullDialog() {
                 }
             )
         }
-
         2 -> {
             FullScreenDialog(
                 openDialog = openDialog,

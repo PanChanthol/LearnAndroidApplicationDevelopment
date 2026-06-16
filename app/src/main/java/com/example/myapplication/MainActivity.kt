@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.myapplication.compose.tabs.ScreenTabs
+import com.example.myapplication.compose.textfield.ScreenTextField
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme(
             ) {
-                ScreenTabs()
+                ScreenTextField()
+//                ScreenTabs()
 //                ScreenSnackBarWithAction()
 //                ScreenSnackBar()
 //                ScreenBottomSheet()
