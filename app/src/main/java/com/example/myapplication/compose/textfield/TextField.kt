@@ -140,14 +140,14 @@ fun ContactForm(
                 ) {
                     Text(
                         modifier = Modifier.padding(end = 16.dp),
-                        text = "First Name",
+                        text = "Name",
                         fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                     )
                     TextField(
                         value = valueName,
                         onValueChange = onValueName,
                         placeholder = {
-                            Text("Enter First Name")
+                            Text("Enter Name")
                         },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth(),
