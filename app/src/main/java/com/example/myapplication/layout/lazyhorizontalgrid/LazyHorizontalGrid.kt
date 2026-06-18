@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.layout.model.foodList
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +114,7 @@ fun ScreenLazyHorizontalGrid() {
                 rows = GridCells.Fixed(3)
             ) {
 
-                items(_root_ide_package_.com.example.myapplication.layout.model.foodList.size) { index ->
+                items(foodList.size) { index ->
                     Row(
                         modifier = Modifier
                             .width(350.dp)
@@ -126,7 +127,7 @@ fun ScreenLazyHorizontalGrid() {
                             modifier = Modifier
                                 .width(120.dp)
                                 .clip(RoundedCornerShape(12.dp)),
-                            painter = painterResource(_root_ide_package_.com.example.myapplication.layout.model.foodList[index].image),
+                            painter = painterResource(foodList[index].image),
                             contentDescription = "",
                             contentScale = ContentScale.Crop
                         )
@@ -140,7 +141,7 @@ fun ScreenLazyHorizontalGrid() {
                                 modifier = Modifier
                                     .padding(vertical = 8.dp)
                                     .weight(1f),
-                                text = _root_ide_package_.com.example.myapplication.layout.model.foodList[index].label,
+                                text =foodList[index].label,
                                 textAlign = TextAlign.Center,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
@@ -164,7 +165,7 @@ fun ScreenLazyHorizontalGrid() {
 @Composable
 @Preview(showBackground = true)
 fun ScreenLazyHorizontalGridPreview() {
-    MyApplicationTheme() {
+    MyApplicationTheme {
         ScreenLazyHorizontalGrid()
     }
 }
