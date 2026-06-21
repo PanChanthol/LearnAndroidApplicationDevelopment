@@ -21,7 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.compose.card.foodList
+import com.example.myapplication.layout.model.foodList
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +59,7 @@ fun HorizontalUncontainedCarousel(){
                     modifier = Modifier
                         .height(205.dp)
                         .clip(RoundedCornerShape(16.dp)),
-                    painter = painterResource(foodList.img),
+                    painter = painterResource(foodList.image),
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )
