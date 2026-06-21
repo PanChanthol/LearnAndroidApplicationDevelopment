@@ -20,23 +20,29 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenToolTip() {
+fun ScreenToolTipWithAction() {
     val tooltipState = rememberTooltipState()
-
     val coroutineScope = rememberCoroutineScope()
-
+    val tooltipViewModel = TooltipViewModel()
+    val accountInfo by tooltipViewModel.account.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        tooltipViewModel.getAccountInfo()
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -73,10 +79,16 @@ fun ScreenToolTip() {
                 tooltip = {
                     RichTooltip(
                         title = {
-                            Text("Tooltip With Action")
+                            accountInfo?.title?.let { Text(it) }
                         },
                         text = {
-                            Text("This is a tooltip with an action button.")
+                            Column(
+                                modifier = Modifier,
+                            ) {
+                                Text(accountInfo?.name ?: "")
+                                Text(accountInfo?.phoneNumber?:"")
+                                Text(accountInfo?.email?:"")
+                            }
                         },
                        action = {
                            TextButton(
@@ -107,36 +119,36 @@ fun ScreenToolTip() {
                 }
             }
             Spacer(modifier = Modifier.height(50.dp))
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                state = tooltipState,
-                tooltip = {
-                    Text("Tooltip Without Action")
-                }
-            ){
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            tooltipState.show()
-                        }
-                    }
-                ){
-                    Icon(
-                        painter = painterResource(R.drawable.ic_report),
-                        contentDescription = null
-                    )
-                }
-            }
+//            TooltipBox(
+//                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+//                state = tooltipState,
+//                tooltip = {
+//                    Text("Tooltip Without Action")
+//                }
+//            ){
+//                IconButton(
+//                    onClick = {
+//                        coroutineScope.launch {
+//                            tooltipState.show()
+//                        }
+//                    }
+//                ){
+//                    Icon(
+//                        painter = painterResource(R.drawable.ic_report),
+//                        contentDescription = null
+//                    )
+//                }
+//            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun ScreenToolTipPreview() {
+fun ScreenToolTipWithActionPreview() {
     MyApplicationTheme {
         MaterialTheme {
-            ScreenToolTip()
+            ScreenToolTipWithAction()
         }
     }
 }
