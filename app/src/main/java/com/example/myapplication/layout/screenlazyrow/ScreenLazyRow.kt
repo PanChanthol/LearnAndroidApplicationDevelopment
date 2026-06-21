@@ -34,13 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.layout.model.foodList
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLazyRow() {
+fun ScreenLazyRow(viewModel: ScreenLazyRowViewModel = viewModel()) {
+    val foods = viewModel.foods
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -74,7 +75,7 @@ fun ScreenLazyRow() {
             ) {
             item {
                 LazyRow {
-                    items(foodList.size) { index ->
+                    items(foods.size) { index ->
                         Box(
                             modifier = Modifier
                                 .size(width = 120.dp, height = 130.dp)
@@ -93,14 +94,14 @@ fun ScreenLazyRow() {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(100.dp),
-                                painter = painterResource(foodList[index].image),
+                                painter = painterResource(foods[index].image),
                                 contentDescription = "",
                                 contentScale = ContentScale.Crop
                             )
 
                             Text(
                                 modifier = Modifier,
-                                text =foodList[index].label ,
+                                text =foods[index].label ,
                                 textAlign = TextAlign.Center,
                                 color = Color.White,
                                 fontSize = 16.sp

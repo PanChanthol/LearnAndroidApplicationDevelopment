@@ -32,9 +32,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,18 +42,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.ecommerceapp.data.banners
-import com.example.myapplication.ecommerceapp.data.category
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ECommerceApp() {
-    val categories = category
-    val banner = banners
-    val pageState = rememberPagerState(pageCount = { banner.size })
-    var text by remember { mutableStateOf("") }
+fun ECommerceApp(viewModel: ECommerceViewModel = viewModel()) {
+    val categories = viewModel.categoriesList
+    val banners = viewModel.bannersList
+    val pageState = rememberPagerState(pageCount = { banners.size })
+    val searchText by viewModel.searchText
+
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -101,8 +98,8 @@ fun ECommerceApp() {
                     )
                 )
                 TextField(
-                    value = text,
-                    onValueChange = { text = it },
+                    value = searchText,
+                    onValueChange = { viewModel.onSearchTextChange(it) },
 
                     modifier = Modifier
                         .fillMaxWidth()

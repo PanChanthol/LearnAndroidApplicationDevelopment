@@ -36,13 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.layout.model.foodList
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLazyHorizontalGrid() {
+fun ScreenLazyHorizontalGrid(viewModel: LazyHorizontalGridViewModel = viewModel()) {
+    val foods = viewModel.foods
     Scaffold(
 
         containerColor = Color.White,
@@ -69,7 +70,7 @@ fun ScreenLazyHorizontalGrid() {
                 ),
                 actions = {
                     Icon(
-                        painter = painterResource(R.drawable.ic_search),
+                        painterResource(R.drawable.ic_search),
                         contentDescription = "",
                         tint = Color.Black
                     )
@@ -114,7 +115,7 @@ fun ScreenLazyHorizontalGrid() {
                 rows = GridCells.Fixed(3)
             ) {
 
-                items(foodList.size) { index ->
+                items(foods.size) { index ->
                     Row(
                         modifier = Modifier
                             .width(350.dp)
@@ -127,7 +128,7 @@ fun ScreenLazyHorizontalGrid() {
                             modifier = Modifier
                                 .width(120.dp)
                                 .clip(RoundedCornerShape(12.dp)),
-                            painter = painterResource(foodList[index].image),
+                            painter = painterResource(foods[index].image),
                             contentDescription = "",
                             contentScale = ContentScale.Crop
                         )
@@ -141,7 +142,7 @@ fun ScreenLazyHorizontalGrid() {
                                 modifier = Modifier
                                     .padding(vertical = 8.dp)
                                     .weight(1f),
-                                text =foodList[index].label,
+                                text =foods[index].label,
                                 textAlign = TextAlign.Center,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold

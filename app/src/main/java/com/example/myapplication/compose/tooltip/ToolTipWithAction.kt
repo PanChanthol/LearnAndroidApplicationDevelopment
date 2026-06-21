@@ -2,9 +2,7 @@ package com.example.myapplication.compose.tooltip
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
@@ -37,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScreenToolTipWithAction() {
     val tooltipState = rememberTooltipState()
+    val position = TooltipDefaults.rememberTooltipPositionProvider()
     val coroutineScope = rememberCoroutineScope()
     val tooltipViewModel = TooltipViewModel()
     val accountInfo by tooltipViewModel.account.collectAsStateWithLifecycle()
@@ -75,7 +73,7 @@ fun ScreenToolTipWithAction() {
             verticalArrangement = Arrangement.Center
         ) {
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(),
+                positionProvider = position,
                 tooltip = {
                     RichTooltip(
                         title = {
@@ -118,27 +116,6 @@ fun ScreenToolTipWithAction() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(50.dp))
-//            TooltipBox(
-//                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-//                state = tooltipState,
-//                tooltip = {
-//                    Text("Tooltip Without Action")
-//                }
-//            ){
-//                IconButton(
-//                    onClick = {
-//                        coroutineScope.launch {
-//                            tooltipState.show()
-//                        }
-//                    }
-//                ){
-//                    Icon(
-//                        painter = painterResource(R.drawable.ic_report),
-//                        contentDescription = null
-//                    )
-//                }
-//            }
         }
     }
 }

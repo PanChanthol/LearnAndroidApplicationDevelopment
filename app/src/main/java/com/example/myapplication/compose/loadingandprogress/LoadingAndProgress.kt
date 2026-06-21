@@ -22,12 +22,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,21 +29,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLoadingAndProgress() {
-    val list = remember { mutableStateListOf<String>()}
-    val coroutineScope = rememberCoroutineScope()
-    var clickOnButton by remember { mutableIntStateOf(1) }
-    var openDialog by remember { mutableStateOf(false)}
+fun ScreenLoadingAndProgress(viewModel: LoadingViewModel = viewModel()) {
+    val list = viewModel.list
+    val clickOnButton by viewModel.clickOnButton
+    val openDialog by viewModel.openDialog
+
     if (openDialog){
         Dialog(
-            onDismissRequest = { openDialog = true},
+            onDismissRequest = { },
             properties = DialogProperties(
                 dismissOnBackPress = false,
                 usePlatformDefaultWidth = false
@@ -113,38 +106,26 @@ fun ScreenLoadingAndProgress() {
         },
         bottomBar= {
             NavigationBar() {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        openDialog = true
-                        clickOnButton = 1
-                        coroutineScope.launch {
-                            delay(3000)
-                            list.add("Hello Seakhey")
-                            openDialog = false
-                        }
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Circular")
-                }
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        openDialog = true
-                        clickOnButton = 2
-                        coroutineScope.launch {
-                            delay(3000)
-                            list.add("Hello Sarath")
-                            openDialog = false
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            viewModel.startLoading(1, "Seakhey")
                         }
+                    ) {
+                        Text("Circular")
                     }
-                ) {
-                    Text("Linear")
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            viewModel.startLoading(2, "Sarath")
+                        }
+                    ) {
+                        Text("Linear")
+                    }
                 }
-            }
             }
         }
     ) { padding ->
@@ -175,4 +156,3 @@ fun ScreenLoadingAndProgressPreview() {
         }
     }
 }
-

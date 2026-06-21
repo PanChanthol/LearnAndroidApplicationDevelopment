@@ -17,23 +17,21 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenRadioButton() {
-    val (selectedSize, onSizeSelected) = remember { mutableIntStateOf(1)}
-    val (selectedSugar, onSugarSelected) = remember { mutableIntStateOf(1)}
-    val sizeModel = SizeModel
-    val sugarModel = sugarModel
+fun ScreenRadioButton(viewModel: RadioButtonViewModel = viewModel()) {
+    val selectedSize by viewModel.selectedSize
+    val selectedSugar by viewModel.selectedSugar
 
     Scaffold(
         topBar = {
@@ -59,19 +57,19 @@ fun ScreenRadioButton() {
                 text = "Select Size",
                 style = MaterialTheme.typography.titleLarge
             )
-            sizeModel.forEachIndexed {index, item ->
+            viewModel.sizes.forEachIndexed {index, item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = {
-                            onSizeSelected(index)
+                            viewModel.onSizeSelected(index)
                         }),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
                         selected = selectedSize == index,
                         onClick = {
-                            onSizeSelected(index)
+                            viewModel.onSizeSelected(index)
                         })
                     Text(
                         text = item.label,
@@ -85,19 +83,19 @@ fun ScreenRadioButton() {
                 text = "Select Sugar",
                 style = MaterialTheme.typography.titleLarge
             )
-            sugarModel.forEachIndexed {index, item ->
+            viewModel.sugarLevels.forEachIndexed {index, item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = {
-                            onSugarSelected(index)
+                            viewModel.onSugarSelected(index)
                         }),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
                         selected = selectedSugar == index,
                         onClick = {
-                            onSugarSelected(index)
+                            viewModel.onSugarSelected(index)
                         })
                     Text(
                         text = item.label,
@@ -117,55 +115,4 @@ fun ScreenRadioButtonPreview() {
             ScreenRadioButton()
         }
     }
-}
-
-data class Model(
-    val id: String, val label: String
-)
-
-val SizeModel = listOf<Model>(
-    Model(
-        id = SizeCapModel.SMALL.code,
-        label = "Small",
-    ), Model(
-        id = SizeCapModel.MEDIUM.code,
-        label = "Medium",
-    ), Model(
-        id = SizeCapModel.lARGE.code,
-        label = "Large",
-    ), Model(
-        id = SizeCapModel.EXTRA_LARGE.code,
-        label = "Extra Large",
-    )
-)
-
-enum class SizeCapModel(val code: String) {
-    SMALL("1"), MEDIUM("2"), lARGE("3"), EXTRA_LARGE("4"),
-}
-val sugarModel = listOf<Model>(
-    Model(
-        id = SugarModel.LEVEL_0.code,
-        label = "No Sugar",
-    ), Model(
-        id = SugarModel.LEVEL_25.code,
-        label = "25%",
-    ), Model(
-        id = SugarModel.LEVEL_50.code,
-        label = "50%",
-    ), Model(
-        id = SugarModel.LEVEL_75.code,
-        label = "75%",
-    ),
-    Model(
-        id = SugarModel.LEVEL_100.code,
-        label = "100%",
-    )
-)
-
-enum class SugarModel(val code: String) {
-    LEVEL_0("1"),
-    LEVEL_25("2"),
-    LEVEL_50("3"),
-    LEVEL_75("4"),
-    LEVEL_100("5"),
 }

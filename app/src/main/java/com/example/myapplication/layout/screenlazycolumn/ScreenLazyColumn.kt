@@ -25,12 +25,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLazyColumn() {
+fun ScreenLazyColumn(viewModel: ScreenLazyColumnViewModel = viewModel()) {
+    val bankAccountsList = viewModel.accounts
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -61,7 +63,7 @@ fun ScreenLazyColumn() {
         ) {
             //item
             item {
-                for (account in bankAccounts) {
+                for (account in bankAccountsList) {
                     Row(
                         modifier = Modifier
                             .padding(6.dp)
@@ -89,8 +91,8 @@ fun ScreenLazyColumn() {
                 }
             }
             //items
-            items(bankAccounts.size) { index ->
-                val accountList = bankAccounts[index]
+            items(bankAccountsList.size) { index ->
+                val accountList = bankAccountsList[index]
                 Row(
                     modifier = Modifier
                         .padding(6.dp)
@@ -117,7 +119,7 @@ fun ScreenLazyColumn() {
             }
             //itemIndex
             itemsIndexed(
-                items = bankAccounts,
+                items = bankAccountsList,
                 key = {_, item -> item.accountNo}
             ){ _, account ->
                 Row(

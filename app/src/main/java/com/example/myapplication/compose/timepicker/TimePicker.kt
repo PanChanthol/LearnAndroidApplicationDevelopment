@@ -15,17 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePicker() {
-    val calendar = Calendar.getInstance()
+fun TimePicker(viewModel: TimePickerViewModel = viewModel()) {
     val timePickerState = rememberTimePickerState(
-        initialHour = calendar.get(Calendar.HOUR_OF_DAY),
-        initialMinute = calendar.get(Calendar.MINUTE),
-//        is24Hour = true
+        initialHour = viewModel.initialHour,
+        initialMinute = viewModel.initialMinute
     )
 
     Scaffold(

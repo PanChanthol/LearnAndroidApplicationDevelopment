@@ -61,7 +61,7 @@ fun HomeScreen() {
             ) {
                 navigationItem.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = selectedNavigation == index + 1,
+                        selected = index +1 == selectedNavigation,
                         onClick = {
                             selectedNavigation = index + 1
                         },

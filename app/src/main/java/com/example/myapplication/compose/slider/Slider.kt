@@ -17,20 +17,18 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenSlider() {
-    var sliderPosition by remember { mutableFloatStateOf(0.0f) }
+fun ScreenSlider(viewModel: SliderViewModel = viewModel()) {
+    val sliderPosition by viewModel.sliderPosition
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -52,7 +50,7 @@ fun ScreenSlider() {
                 modifier = Modifier.rotate(-90f),
                 value = sliderPosition,
                 onValueChange = {
-                    sliderPosition = it
+                    viewModel.onSliderPositionChange(it)
                 },
                 thumb = {
                     Box(

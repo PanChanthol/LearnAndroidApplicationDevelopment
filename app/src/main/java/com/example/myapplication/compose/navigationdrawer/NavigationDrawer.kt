@@ -24,39 +24,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenNavigationDrawer() {
+fun ScreenNavigationDrawer(viewModel: NavigationDrawerViewModel = viewModel()) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var label by remember { mutableStateOf("") }
+    val label by viewModel.label
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.surface,
             ) {
-                DrawerItem { menuItem ->
-                    label = menuItem.title
+                DrawerItem(viewModel) { menuItem ->
+                    viewModel.onMenuItemClick(menuItem)
                     scope.launch {
-                        when (menuItem.id) {
-                            1 -> {
-                            drawerState.close()
-                            }
-                        }
                         drawerState.close()
                     }
                 }
@@ -116,8 +110,11 @@ fun ScreenNavigationDrawer() {
 }
 
 @Composable
-fun DrawerItem(onClick: (menuItems: NavDrawerItem) -> Unit) {
-    val menuItems = navDrawerItems
+fun DrawerItem(
+    viewModel: NavigationDrawerViewModel,
+    onClick: (menuItems: NavDrawerItem) -> Unit
+) {
+    val menuItems by viewModel.menuItems
     Column(
     ) {
         Box(

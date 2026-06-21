@@ -30,14 +30,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.layout.model.accountBankList
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenHorizontalPager() {
-    val accounts = accountBankList
+fun ScreenHorizontalPager(viewModel: HorizontalPagerViewModel = viewModel()) {
+    val accounts = viewModel.accounts
     val pagerState = rememberPagerState(pageCount = { accounts.size })
     Scaffold(
         containerColor = Color.White,
@@ -64,7 +64,7 @@ fun ScreenHorizontalPager() {
                 ),
                 actions = {
                     Icon(
-                        painter = painterResource(R.drawable.ic_search),
+                        painterResource(R.drawable.ic_search),
                         contentDescription = "",
                         tint = Color.Black
                     )

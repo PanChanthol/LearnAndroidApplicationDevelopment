@@ -11,26 +11,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenSnackBar() {
-    val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+fun ScreenSnackBar(viewModel: SnackBarViewModel = viewModel()) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -41,7 +34,7 @@ fun ScreenSnackBar() {
         },
         snackbarHost = {
             SnackbarHost(
-                hostState = snackBarHostState
+                hostState = viewModel.snackBarHostState
             )
         },
         floatingActionButton = {
@@ -52,10 +45,7 @@ fun ScreenSnackBar() {
                     contentDescription = null)
                  },
                 onClick = {
-                    scope.launch {
-                        snackBarHostState.showSnackbar("Snack bar")
-                        delay(2000.milliseconds)
-                    }
+                    viewModel.showSnackBar("Snack bar")
                 }
             )
         }
