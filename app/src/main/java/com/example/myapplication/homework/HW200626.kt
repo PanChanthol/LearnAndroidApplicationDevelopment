@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,12 +49,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    var selectedNavigation by remember { mutableIntStateOf(SelectedNavigation.HOME.value) }
+    var selectedNavigation by remember { mutableIntStateOf(SelectedNavigation.SETTING.value) }
     val navigationItem = navigationItems
     Scaffold(
-        containerColor = Color.Gray.copy(alpha = 0.2f),
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onBackground,
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ) {
                 navigationItem.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedNavigation == index + 1,
@@ -67,10 +73,15 @@ fun HomeScreen() {
                         },
                         label = {
                             Text(
-                                text= item.title,
-                                fontSize = 15.sp,
-                                )
-                        }
+                                text = item.title,
+                                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = MaterialTheme.colorScheme.background,
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                        )
                     )
                 }
             }
@@ -105,8 +116,10 @@ fun HomeScreen() {
 @Composable
 @Preview(showBackground = true, device = "id:pixel_9_pro")
 fun HomeScreenPreview() {
-    MyApplicationTheme {
-        HomeScreen()
+    MaterialTheme {
+        MyApplicationTheme {
+            HomeScreen()
+        }
     }
 }
 
@@ -120,7 +133,7 @@ fun Card() {
     Spacer(modifier = Modifier.height(16.dp))
     Text(
         text = "Welcome, Pan Chanthol",
-        fontSize = 22.sp,
+        fontSize = MaterialTheme.typography.titleLarge.fontSize,
         fontWeight = FontWeight.Bold
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -129,8 +142,8 @@ fun Card() {
             .height(128.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF0D63BD),
-            contentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         onClick = { }
     ) {
@@ -149,7 +162,7 @@ fun Card() {
             Text(
                 text = "$formattedBalance",
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -181,7 +194,7 @@ fun QuickActions() {
     ) {
         Text(
             text = "Quick Actions",
-            fontSize = 22.sp,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold
         )
         Row(
@@ -199,7 +212,7 @@ fun QuickActions() {
                         modifier = Modifier
                             .size(56.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.background,
+                                color = MaterialTheme.colorScheme.surface,
                                 shape = MaterialTheme.shapes.medium
                             ),
                         contentAlignment = Alignment.Center
@@ -207,7 +220,7 @@ fun QuickActions() {
                         Icon(
                             painter = painterResource(item.icon),
                             contentDescription = null,
-                            tint = Color(0xFF0D63BD)
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -216,7 +229,8 @@ fun QuickActions() {
                     Text(
                         text = item.title,
                         textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -249,7 +263,7 @@ fun Services() {
     ) {
         Text(
             text = "Services",
-            fontSize = 22.sp,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold
         )
         serviceItems.forEach { item ->
@@ -259,8 +273,8 @@ fun Services() {
                     .height(80.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
             ) {
                 Row(
@@ -272,7 +286,7 @@ fun Services() {
                     Icon(
                         painter = painterResource(item.icon),
                         contentDescription = null,
-                        tint = Color(0xFF0D63BD)
+                        tint = MaterialTheme.colorScheme.primary
                     )
                     Column(
                         modifier = Modifier
@@ -281,13 +295,15 @@ fun Services() {
                     ) {
                         Text(
                             text = item.title,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = item.description,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.onSurface.copy(0.3f)
+
                         )
                     }
                 }
@@ -338,7 +354,7 @@ fun FavoriteScreen() {
     Spacer(modifier = Modifier.height(16.dp))
     Text(
         text = "Favorite",
-        fontSize = 22.sp,
+        fontSize = MaterialTheme.typography.titleLarge.fontSize,
         fontWeight = FontWeight.Bold
     )
     favoriteList.forEach { item ->
@@ -348,8 +364,8 @@ fun FavoriteScreen() {
                 .height(80.dp)
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             )
         ) {
             Row(
@@ -361,7 +377,7 @@ fun FavoriteScreen() {
                 Icon(
                     painter = painterResource(R.drawable.ic_star_fill),
                     contentDescription = null,
-                    tint = Color(0xFFF19E39).copy(0.8f)
+                    tint = MaterialTheme.colorScheme.primary
                 )
                 Column(
                     modifier = Modifier
@@ -371,12 +387,13 @@ fun FavoriteScreen() {
                     Text(
                         text = item.title,
                         fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Normal,
                     )
                     Text(
                         text = item.description,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface.copy(0.3f)
                     )
                 }
             }
@@ -402,7 +419,7 @@ fun SettingScreen() {
     Spacer(modifier = Modifier.height(16.dp))
     Text(
         text = "Setting",
-        fontSize = 22.sp,
+        fontSize = MaterialTheme.typography.titleLarge.fontSize,
         fontWeight = FontWeight.Bold
     )
     Card(
@@ -411,7 +428,8 @@ fun SettingScreen() {
             .height(110.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
         Row(
@@ -424,16 +442,16 @@ fun SettingScreen() {
                 modifier = Modifier
                     .size(80.dp)
                     .background(
-                        color = Color(0xFF0D63BD),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "CT",
-                    fontSize = 32.sp,
+                    text = "PC",
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             Column(
@@ -443,13 +461,14 @@ fun SettingScreen() {
             ) {
                 Text(
                     text = "Pan Chanthol",
-                    fontSize = 24.sp,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "Junior Android Developer",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.3f)
                 )
             }
         }
@@ -461,8 +480,8 @@ fun SettingScreen() {
                 .height(80.dp)
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             )
         ) {
             Row(
@@ -474,7 +493,7 @@ fun SettingScreen() {
                 Icon(
                     painter = painterResource(item.icon),
                     contentDescription = null,
-                    tint = Color(0xFF0D63BD)
+                    tint = MaterialTheme.colorScheme.primary
                 )
                 Column(
                     modifier = Modifier
@@ -483,15 +502,21 @@ fun SettingScreen() {
                 ) {
                     Text(
                         text = item.title,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                        fontWeight = FontWeight.Normal
                     )
                     Text(
                         text = item.description,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface.copy(0.3f)
                     )
                 }
+                Icon(
+                   imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface.copy(0.3f)
+                )
             }
         }
     }
